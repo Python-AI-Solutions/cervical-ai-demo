@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cervical AI Viewer</title>
+  <title>Cervical AI Viewer - Niivue Medical Imaging</title>
   <link rel="stylesheet" href="niivue/niivue.css" />
   <style>
     body {
@@ -22,8 +22,9 @@
     
     #gl1 {
       display: block;
+      width: 100%;
+      height: calc(100% - 30px);
       background-color: #000;
-      cursor: crosshair;
     }
     
     .viewer-overlay {
@@ -41,7 +42,7 @@
     
     .controls {
       position: absolute;
-      bottom: 20px;
+      bottom: 40px;
       left: 20px;
       display: flex;
       gap: 10px;
@@ -63,8 +64,13 @@
       background: rgba(60, 60, 60, 0.9);
     }
     
-    .control-btn:active {
-      background: rgba(80, 80, 80, 0.9);
+    .ai-btn {
+      background: rgba(0, 100, 200, 0.8);
+      border: 1px solid #0066cc;
+    }
+    
+    .ai-btn:hover {
+      background: rgba(0, 120, 220, 0.9);
     }
     
     .status-bar {
@@ -97,11 +103,10 @@
     .drop-zone.drag-over {
       background: rgba(0, 123, 255, 0.1);
       border: 3px dashed #007bff;
-      pointer-events: none;
     }
     
     .drop-zone.drag-over::before {
-      content: "Drop medical image here";
+      content: "Drop NIfTI/DICOM medical image";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -130,26 +135,70 @@
     #file-input {
       display: none;
     }
+    
+    .info-panel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 10px;
+      color: #fff;
+      font-size: 12px;
+      max-width: 250px;
+      z-index: 100;
+    }
+    
+    .info-panel h3 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #0099ff;
+    }
+    
+    .info-panel p {
+      margin: 5px 0;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
   <div class="viewer-container">
     <canvas id="gl1"></canvas>
     <div class="drop-zone" id="drop-zone"></div>
+    
     <div class="viewer-overlay">
-      <div id="image-info">Cervical Cytology AI Viewer</div>
+      <div id="image-info">Cervical Cytology AI Viewer - Medical Imaging</div>
     </div>
+    
+    <div class="info-panel">
+      <h3>📋 Cervical AI Demo</h3>
+      <p><strong>Image Formats:</strong></p>
+      <p>• Standard: JPEG, PNG</p>
+      <p>• Medical: NIfTI, DICOM</p>
+      <p><strong>Controls:</strong></p>
+      <p>• Scroll: Zoom</p>
+      <p>• Drag: Pan</p>
+      <p>• Right-click: Adjust contrast</p>
+      <p><strong>Features:</strong></p>
+      <p>• AI Analysis (Demo)</p>
+      <p>• Overlay Support</p>
+    </div>
+    
     <div class="controls">
       <button class="control-btn" onclick="resetView()">Reset View</button>
       <button class="control-btn" onclick="toggleInfo()">Toggle Info</button>
       <label for="file-input" class="file-input-btn">Load Image</label>
-      <input type="file" id="file-input" accept="image/*,.dcm,.nii,.nii.gz,.tiff,.tif,.svs,.ndpi">
+      <input type="file" id="file-input" accept="image/*,.nii,.nii.gz,.dcm,.nrrd,.mgh,.mgz,.v,.v16" multiple>
+      <button class="control-btn ai-btn" onclick="cervicalAIViewer.addAIAnnotations()">Run AI Analysis</button>
     </div>
+    
     <div class="status-bar">
-      <span id="status-text">Ready - Drag and drop medical images or click Load Image</span>
+      <span id="status-text">Ready - Load NIfTI/DICOM medical images</span>
       <span style="margin-left: auto;" id="coordinates"></span>
     </div>
   </div>
+  
   <script src="niivue/niivue.js"></script>
   <script src="viewer.js"></script>
 </body>
