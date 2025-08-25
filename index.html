@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cervical AI Viewer</title>
+  <link rel="stylesheet" href="niivue/niivue.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+    
+    .viewer-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+    }
+    
+    #gl1 {
+      display: block;
+      background-color: #000;
+      cursor: crosshair;
+    }
+    
+    .viewer-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #fff;
+      font-size: 14px;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: 1px solid #333;
+    }
+    
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+    
+    .control-btn {
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid #555;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+    
+    .control-btn:hover {
+      background: rgba(60, 60, 60, 0.9);
+    }
+    
+    .control-btn:active {
+      background: rgba(80, 80, 80, 0.9);
+    }
+    
+    .status-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background: rgba(20, 20, 20, 0.9);
+      border-top: 1px solid #333;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      color: #ccc;
+      font-size: 12px;
+      z-index: 100;
+    }
+    
+    .drop-zone {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 30px;
+      pointer-events: none;
+      z-index: 200;
+      transition: all 0.3s ease;
+    }
+    
+    .drop-zone.drag-over {
+      background: rgba(0, 123, 255, 0.1);
+      border: 3px dashed #007bff;
+      pointer-events: none;
+    }
+    
+    .drop-zone.drag-over::before {
+      content: "Drop medical image here";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #007bff;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+    
+    .file-input-btn {
+      background: rgba(0, 123, 255, 0.8);
+      border: 1px solid #007bff;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+    
+    .file-input-btn:hover {
+      background: rgba(0, 123, 255, 1);
+    }
+    
+    #file-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewer-container">
+    <canvas id="gl1"></canvas>
+    <div class="drop-zone" id="drop-zone"></div>
+    <div class="viewer-overlay">
+      <div id="image-info">Cervical Cytology AI Viewer</div>
+    </div>
+    <div class="controls">
+      <button class="control-btn" onclick="resetView()">Reset View</button>
+      <button class="control-btn" onclick="toggleInfo()">Toggle Info</button>
+      <label for="file-input" class="file-input-btn">Load Image</label>
+      <input type="file" id="file-input" accept="image/*,.dcm,.nii,.nii.gz,.tiff,.tif,.svs,.ndpi">
+    </div>
+    <div class="status-bar">
+      <span id="status-text">Ready - Drag and drop medical images or click Load Image</span>
+      <span style="margin-left: auto;" id="coordinates"></span>
+    </div>
+  </div>
+  <script src="niivue/niivue.js"></script>
+  <script src="viewer.js"></script>
+</body>
+</html>
